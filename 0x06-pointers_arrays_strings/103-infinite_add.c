@@ -1,67 +1,68 @@
-/**
- * infinite_add - Add up two numbers stored in given char arrays
- * @n1: The first number
- * @n2: The second number
- * @r: Pointer to the buffer to store result
- * @size_r: The size of the buffer
- *
- * Return: 0 if buffer too small to store result, else return pointer to buffer
- */
+#include "main.h"
 
+/**
+ * _strlen - returns the length of a string
+ * @s: the string whose length to check
+ *
+ * Return: integer length of string
+ */
+int _strlen(char *s)
+{
+	int i = 0;
+
+	while (*s++)
+		i++;
+	return (i);
+}
+
+/**
+ * rev_string - reverses a string
+ * @s: the string to reverse
+ *
+ * Return: void
+ */
+char *rev_string(char *s)
+{
+	int l = _strlen(s), i = 0;
+	char t;
+
+	for (i = 0; i < l / 2; i++)
+	{
+		t = s[l - i - 1];
+		s[l - i - 1] = s[i];
+		s[i] = t;
+	}
+	return (s);
+}
+
+/**
+ * infinite_add - adds arbitrarily long string of digits
+ * @n1: the first digit string
+ * @n2: the second digit string
+ * @r: the result buffer
+ * @size_r: the size of result buffer
+ *
+ * Return: char pointer to buffer
+ */
 char *infinite_add(char *n1, char *n2, char *r, int size_r)
 {
-int l1, l2, tmpl, rl, i, sum, num1, num2, carry;
-char tmp[10000];
+	int l1 = _strlen(n1), l2 = _strlen(n2), i = 0, a, b, c = 0;
 
-rl = i = l1 = l2 = sum = num1 = num2 = carry = 0;
-while (n1[l1] != '\0')
-l1++;
-while (n2[l2] != '\0')
-l2++;
-if (l1 + 2 > size_r || l2 + 2 > size_r)
-return (0);
-l1--;
-l2--;
-while (i <= l1 || i <= l2)
-{
-num1 = num2 = 0;
-if (i <= l1)
-num1 = n1[l1 - i] - '0';
-if (i <= l2 && (l2 - i) >= 0)
-num2 = n2[l2 - i] - '0';
-sum = num1 + num2 + carry;
-if (sum >= 10)
-{
-carry = 1;
-sum -= 10;
-}
-else
-carry = 0;
-r[i] = sum + '0';
-i++;
-rl++;
-}
-if (carry > 0)
-{
-r[i] = carry + '0';
-r[i + 1] = '\0';
-}
-i = tmpl = 0;
-while (i <= rl)
-{
-tmp[i] = r[rl - i];
-tmpl++;
-i++;
-}
-i = 0;
-while (i < tmpl)
-{
-if (r[i] == '\0')
-{
-break;
-}
-r[i] = tmp[i];
-i++;
-}
-return (r);
+	for (l1--, l2--, size_r--; l1 >= 0 || l2 >= 0 || c; l1--, l2--, i++)
+	{
+		if (i >= size_r)
+			return (0);
+		a = 0;
+		b = 0;
+		if (l1 >= 0)
+			a = n1[l1] - '0';
+		if (l2 >= 0)
+			b = n2[l2] - '0';
+		a = a + b + c;
+		c = a / 10;
+		a %= 10;
+		r[i] = a + '0';
+	}
+	r[i] = '\0';
+	return (rev_string(r));
 }
